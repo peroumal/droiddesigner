@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        File f = new File(getFilesDir(),"/repo49/");
-        new Clone(f).execute("https://github.com/rayanperoumal/droiddesigner.git");
+        File f = new File(getFilesDir(),"/repos3/");
+        new Clone("https://github.com/rayanperoumal/droiddesigner.git").execute(f);
     }
 }
