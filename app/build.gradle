@@ -10,6 +10,7 @@ android {
         versionCode 3
         versionName "0.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
         jackOptions {
             enabled true
         }
@@ -35,7 +36,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
-    compile (group:'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '4.8.0.201706111038-r'){
+    compile (group:'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '3.7.0.201502031740-rc1'){
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
 
