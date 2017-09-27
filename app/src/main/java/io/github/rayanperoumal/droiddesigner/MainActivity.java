@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         clonerView.setOnClickListener(view -> {
                 cloneText.setEnabled(true);
-                cloneText.setHint("domaine/repertoire/repository.git");
+                cloneText.setHint("server/.../repository.git");
                 cloneTitle.setVisibility(View.VISIBLE);
                 cloneTitle.setText("Specifier le nom du repository");
                 Log.i("activity:event","clone:called");
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.toString().endsWith(".git")){
-                    if(checkDomain(charSequence.toString())){
+                    if(checkServer(charSequence.toString())){
                         alert.setVisibility(View.VISIBLE);
                         alert.setText("Le repo est pret à etre cloné");
                         submit.setVisibility(View.VISIBLE);
@@ -85,15 +85,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public boolean checkDomain(String name){
+    public boolean checkServer(String name){
         boolean domain=false;
-        int slash=-1, point=-1;
-        for(int i=0; i<(name.length()-5) && slash<0;i++)
-            switch(name.charAt(i)){
-                case '/': slash=i;break;
-                case '.': point=i;break;
-            }
-        if((point+1)<slash) domain = true;
-        return domain;
+
+        // Check only domain name
+        for(int i=0; i<(name.length()-5) && !domain;i++)
+                if(name.charAt(i)=='/') domain=true;
+
+            return domain;
     }
 }
