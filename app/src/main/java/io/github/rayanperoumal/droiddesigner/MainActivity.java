@@ -32,13 +32,6 @@ public class MainActivity extends AppCompatActivity {
         cloneTitle = (TextView) findViewById(R.id.cloneTitle);
         alert = (TextView) findViewById(R.id.alert);
         submit = (Button)findViewById(R.id.submit);
-        new Clone("https://github.com/rayanperoumal/droiddesigner.git"){
-            @Override
-            protected void onPostExecute(Integer integer) {
-                super.onPostExecute(integer);
-                Toast.makeText(MainActivity.this,getMessage(integer),Toast.LENGTH_LONG).show();
-            }
-        }.execute(this);
     }
 
     @Override
@@ -46,10 +39,23 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         clonerView.setOnClickListener(view -> {
                 cloneText.setEnabled(true);
-                cloneText.setHint("server/.../repository.git");
+                cloneText.setHint("domaine/repertoire/repository.git");
                 cloneTitle.setVisibility(View.VISIBLE);
                 cloneTitle.setText("Specifier le nom du repository");
                 Log.i("activity:event","clone:called");
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Clone(cloneText.getText().toString()){
+                    @Override
+                    protected void onPostExecute(Integer integer) {
+                        super.onPostExecute(integer);
+                        Toast.makeText(MainActivity.this,getMessage(integer),Toast.LENGTH_LONG).show();
+                    }
+                }.execute(MainActivity.this);
+            }
         });
 
         cloneText.addTextChangedListener(new TextWatcher() {
@@ -86,12 +92,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public boolean checkServer(String name){
-        boolean domain=false;
 
-        // Check only domain name
-        for(int i=0; i<(name.length()-5) && !domain;i++)
-                if(name.charAt(i)=='/') domain=true;
+        // Check domain name
+        for(int i=1; i<(name.length()-5);i++)
+            if(name.charAt(i)=='/' && name.charAt(i-1)!='/' && name.charAt(i+1)!='/') return true;
 
-            return domain;
+        return false;
     }
 }
