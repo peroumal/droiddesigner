@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:orientation="vertical">
         <android.support.v7.widget.CardView
             android:id="@+id/clone"
@@ -17,28 +16,52 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="8dp"
+            android:clickable="true"
             android:elevation="8dp"
             android:background="?attr/selectableItemBackground">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:padding="16dp"
                 android:orientation="vertical">
             <TextView
-                android:paddingLeft="16dp"
+                android:id="@+id/cloneTitle"
+                android:paddingBottom="16dp"
+                android:textColor="@android:color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Cliquez ci-dessous pour cloner un repository"/>
+                android:visibility="gone"/>
             <EditText
-                android:padding="16dp"
-                android:layout_width="match_parent"
+                android:id="@+id/cloneText"
+                android:layout_width="wrap_content"
+                android:maxLines="2"
                 android:layout_height="wrap_content"
                 android:enabled="false"
+                android:clickable="false"
                 android:background="@null"
-                android:clickable="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:hint="Cloner un repository"/>
+                <TextView
+                    android:id="@+id/alert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="le domaine du repository n'est pas reconnu"/>
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="end"
+                    android:text="cloner"/>
     </LinearLayout>
+
+
+
     </android.support.v7.widget.CardView>
     </LinearLayout>
 
