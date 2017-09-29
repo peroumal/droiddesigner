@@ -36,7 +36,6 @@
             <EditText
                 android:id="@+id/cloneText"
                 android:layout_width="wrap_content"
-                android:maxLines="2"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:clickable="false"
