@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.IOException;
 
 import io.github.rayanperoumal.droiddesigner.git.Clone;
 
@@ -22,6 +23,11 @@ public class MainActivity extends AppCompatActivity {
     CardView clonerView;
     EditText cloneText;
     TextView cloneTitle,alert;
+    public static final int CLONE_TERMINATED=2;
+    public static final int CLONE_IN_PROGRESS=1;
+    public static final int CLONE_AVAILABLE=0;
+    public static final int CLONE_UNAVAILABLE=-1;
+    int cloneStatus =-1;
     Button submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,19 @@ public class MainActivity extends AppCompatActivity {
                     protected void onPostExecute(Integer integer) {
                         super.onPostExecute(integer);
                         Toast.makeText(MainActivity.this,getMessage(integer),Toast.LENGTH_LONG).show();
+                        switch (integer){
+                            case REPO_CLONED:
+                                cloneStatus=CLONE_TERMINATED;
+                                cloneTitle.setText("Le repository sera dans le repertoire");
+                                try {
+                                    cloneText.setText(dir.getCanonicalPath());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                submit.setText("terminer");
+                                break;
+                            default:break;
+                        }
                     }
                 }.execute(MainActivity.this);
             }
@@ -66,20 +85,21 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.toString().endsWith(".git")){
-                    if(checkServer(charSequence.toString())){
-                        alert.setVisibility(View.VISIBLE);
-                        alert.setText("Le repo est pret à etre cloné");
-                        submit.setVisibility(View.VISIBLE);
-                    }
-                    else{
+                if (cloneStatus != CLONE_TERMINATED) {
+                    if (charSequence.toString().endsWith(".git")) {
+                        if (checkServer(charSequence.toString())) {
+                            alert.setVisibility(View.VISIBLE);
+                            alert.setText("Le repo est pret à etre cloné");
+                            submit.setVisibility(View.VISIBLE);
+                        } else {
+                            submit.setVisibility(View.GONE);
+                            alert.setVisibility(View.VISIBLE);
+                            alert.setText("Ce repository ne contient pas de domaine valide");
+                        }
+                    } else {
                         submit.setVisibility(View.GONE);
-                        alert.setVisibility(View.VISIBLE);
-                        alert.setText("Ce repository ne contient pas de domaine valide");
+                        alert.setVisibility(View.GONE);
                     }
-                } else {
-                    submit.setVisibility(View.GONE);
-                    alert.setVisibility(View.GONE);
                 }
             }
 
@@ -91,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
     public boolean checkServer(String name){
 
         // Check domain name

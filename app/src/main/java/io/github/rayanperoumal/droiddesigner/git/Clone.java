@@ -19,6 +19,7 @@ public class Clone extends AsyncTask<Context,Integer,Integer>{
     public static final int UNKNOW_ERROR =0;
     public static final int REPO_EXIST =1;
     public static final int REPO_CLONED =2;
+    public File dir;
 
     public Clone(String repository){
         this.repository = repository;
@@ -39,7 +40,7 @@ public class Clone extends AsyncTask<Context,Integer,Integer>{
     protected Integer doInBackground(Context... contexts) {
         File root = new File(contexts[0].getFilesDir(),"/repositories/");
         root.mkdirs();
-        File dir = new File(root,getRepoName());
+        dir = new File(root,getRepoName());
         if(dir.exists()){
             return REPO_EXIST;
         }
