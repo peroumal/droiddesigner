@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DroidDesigner</string>
+    <string name="title_activity_project">ProjectActivity</string>
+    <string name="title_graphics">Visuel</string>
+    <string name="title_code">Code</string>
+    <string name="title_files">Files</string>
+    <string name="title_manage">gérer</string>
 </resources>

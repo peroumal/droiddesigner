@@ -54,26 +54,30 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Clone(cloneText.getText().toString()){
-                    @Override
-                    protected void onPostExecute(Integer integer) {
-                        super.onPostExecute(integer);
-                        Toast.makeText(MainActivity.this,getMessage(integer),Toast.LENGTH_LONG).show();
-                        switch (integer){
-                            case REPO_CLONED:
-                                cloneStatus=CLONE_TERMINATED;
-                                cloneTitle.setText("Le repository sera dans le repertoire");
-                                try {
-                                    cloneText.setText(dir.getCanonicalPath());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                submit.setText("terminer");
-                                break;
-                            default:break;
+                if(cloneStatus == CLONE_TERMINATED){
+
+                }else{
+                    new Clone(cloneText.getText().toString()){
+                        @Override
+                        protected void onPostExecute(Integer integer) {
+                            super.onPostExecute(integer);
+                            Toast.makeText(MainActivity.this,getMessage(integer),Toast.LENGTH_LONG).show();
+                            switch (integer){
+                                case REPO_CLONED:
+                                    cloneStatus=CLONE_TERMINATED;
+                                    cloneTitle.setText("Le repository sera dans le repertoire");
+                                    try {
+                                        cloneText.setText(dir.getCanonicalPath());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    submit.setText("terminer");
+                                    break;
+                                default:break;
+                            }
                         }
-                    }
-                }.execute(MainActivity.this);
+                    }.execute(MainActivity.this);
+                }
             }
         });
 
