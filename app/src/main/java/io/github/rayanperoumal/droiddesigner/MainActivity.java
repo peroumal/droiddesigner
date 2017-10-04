@@ -1,5 +1,6 @@
 package io.github.rayanperoumal.droiddesigner;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -22,6 +23,7 @@ import io.github.rayanperoumal.droiddesigner.git.Clone;
 public class MainActivity extends AppCompatActivity {
     CardView clonerView;
     EditText cloneText;
+    File dir=null;
     TextView cloneTitle,alert;
     public static final int CLONE_TERMINATED=2;
     public static final int CLONE_IN_PROGRESS=1;
@@ -40,6 +42,18 @@ public class MainActivity extends AppCompatActivity {
         submit = (Button)findViewById(R.id.submit);
     }
 
+    /**
+     * Open an project based on his repository folder
+     * @param path  Il correspond to the repository direcctory.
+     *              It can be found by method getCanonicalPath()
+     *              on the File Object of an repository
+     */
+    public void openProject(String path){
+        Intent intent = new Intent(MainActivity.this,ProjectActivity.class);
+        intent.putExtra("path",cloneText.getText());
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -55,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(cloneStatus == CLONE_TERMINATED){
-
+                    openProject(cloneText.getText().toString());
                 }else{
                     new Clone(cloneText.getText().toString()){
                         @Override
