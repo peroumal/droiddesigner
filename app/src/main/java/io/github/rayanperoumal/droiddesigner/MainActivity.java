@@ -44,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Open an project based on his repository folder
-     * @param path  Il correspond to the repository direcctory.
-     *              It can be found by method getCanonicalPath()
+     * @param path  Il correspond to the repository directory.
+     *              It can be found by method getAbsolutePath()
      *              on the File Object of an repository
      */
     public void openProject(String path){
         Intent intent = new Intent(MainActivity.this,ProjectActivity.class);
-        intent.putExtra("path",cloneText.getText());
+        intent.putExtra("path",path);
         startActivity(intent);
     }
 
@@ -80,11 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                 case REPO_CLONED:
                                     cloneStatus=CLONE_TERMINATED;
                                     cloneTitle.setText("Le repository sera dans le repertoire");
-                                    try {
                                         cloneText.setText(dir.getCanonicalPath());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
                                     submit.setText("terminer");
                                     break;
                                 default:break;
