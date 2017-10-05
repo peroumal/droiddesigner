@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 
+import io.github.rayanperoumal.droiddesigner.file.FileListView;
+
 public class ProjectActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
@@ -47,21 +49,10 @@ public class ProjectActivity extends AppCompatActivity {
             String path = getIntent().getStringExtra("path");
             Log.i("Project:path:",path);
             File file = new File(path);
-            displayFiles(file);
+            FileListView view = new FileListView(this,file);
         }
     }
 
-    public void displayFiles(File file){
-        if(file.exists()){
-            File[] list= file.listFiles();
-            for(int i=0;i<list.length;i++){
-                try {
-                    Log.i("Project:found:",list[i].getCanonicalPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+
 
 }

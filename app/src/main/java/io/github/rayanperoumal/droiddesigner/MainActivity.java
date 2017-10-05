@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                 case REPO_CLONED:
                                     cloneStatus=CLONE_TERMINATED;
                                     cloneTitle.setText("Le repository sera dans le repertoire");
-                                        cloneText.setText(dir.getCanonicalPath());
+                                        cloneText.setText(dir.getAbsolutePath());
                                     submit.setText("terminer");
                                     break;
                                 default:break;
