@@ -15,8 +15,6 @@ import io.github.rayanperoumal.droiddesigner.file.FileListView;
 
 public class ProjectActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -41,8 +39,6 @@ public class ProjectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
-
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if(getIntent().hasExtra("path")){
@@ -50,6 +46,7 @@ public class ProjectActivity extends AppCompatActivity {
             Log.i("Project:path:",path);
             File file = new File(path);
             FileListView view = new FileListView(this,file);
+
         }
     }
 

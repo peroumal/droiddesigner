@@ -1,6 +1,7 @@
 package io.github.rayanperoumal.droiddesigner.file;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,14 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileListView extends RecyclerView{
     private static File [] files;
+    private final File parent;
 
     public FileListView(Context context, File parent) {
         super(context);
-
+        this.parent = parent;
+        displayFiles(parent);
+        setLayoutManager(new LinearLayoutManager(context));
+        setAdapter(new FileListViewAdapter(context));
     }
 
     public void displayFiles(File file){
@@ -40,7 +45,6 @@ public class FileListView extends RecyclerView{
 
     public class FileListViewAdapter extends RecyclerView.Adapter<FileListViewAdapter.ViewHolder>{
         public Context context;
-        ViewHolder selectedViewHolder=null;
         ViewHolder viewHolder;
         public FileListViewAdapter(Context context){
             this.context = context;
