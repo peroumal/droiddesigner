@@ -20,6 +20,7 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileListView extends RecyclerView{
     private static File [] files;
+    public static OnClickListener listener;
     private final File parent;
 
     public FileListView(Context context, File parent) {
@@ -56,6 +57,12 @@ public class FileListView extends RecyclerView{
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file,parent,false);
             viewHolder = new ViewHolder(view);
+            if(listener==null){
+                listener = view1 ->
+                        Log.i("FileListView","On click works");
+            }
+
+            if(listener!=null) view.setOnClickListener(listener);
             return viewHolder;
         }
 
@@ -69,7 +76,6 @@ public class FileListView extends RecyclerView{
             return files.length;
 
         }
-
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             public TextView text;
