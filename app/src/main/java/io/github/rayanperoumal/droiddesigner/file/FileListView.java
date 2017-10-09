@@ -25,12 +25,12 @@ public class FileListView extends RecyclerView{
     public FileListView(Context context, File parent) {
         super(context);
         this.parent = parent;
-        displayFiles(parent);
+        files = catchFiles(parent);
         setLayoutManager(new LinearLayoutManager(context));
         setAdapter(new FileListViewAdapter(context));
     }
 
-    public void displayFiles(File file){
+    public File[] catchFiles(File file){
         if(file.exists()){
             File[] list= file.listFiles();
             for(int i=0;i<list.length;i++){
@@ -40,7 +40,9 @@ public class FileListView extends RecyclerView{
                     e.printStackTrace();
                 }
             }
+            return list;
         }
+        return new File[]{file};
     }
 
     public class FileListViewAdapter extends RecyclerView.Adapter<FileListViewAdapter.ViewHolder>{
