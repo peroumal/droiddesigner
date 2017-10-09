@@ -69,7 +69,6 @@ public class FileListView extends RecyclerView{
         }
 
 
-
         public class ViewHolder extends RecyclerView.ViewHolder{
             public TextView text;
             public View view;
