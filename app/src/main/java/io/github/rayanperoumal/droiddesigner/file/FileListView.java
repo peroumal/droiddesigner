@@ -20,7 +20,7 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileListView extends RecyclerView{
     private static File [] files;
-    public static OnClickListener listener;
+    public static FileSelectionListener listener;
     private final File parent;
 
     public FileListView(Context context, File parent) {
@@ -30,6 +30,15 @@ public class FileListView extends RecyclerView{
         setLayoutManager(new LinearLayoutManager(context));
         setAdapter(new FileListViewAdapter(context));
     }
+
+    public interface FileSelectionListener{
+        void onSelected(File file);
+    }
+
+    public void setOnFileSelected(FileSelectionListener listener){
+        this.listener = listener;
+    }
+
 
     public File[] catchFiles(File file){
         if(file.exists()){
@@ -57,12 +66,6 @@ public class FileListView extends RecyclerView{
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file,parent,false);
             viewHolder = new ViewHolder(view);
-            if(listener==null){
-                listener = view1 ->
-                        Log.i("FileListView","On click works");
-            }
-
-            if(listener!=null) view.setOnClickListener(listener);
             return viewHolder;
         }
 
@@ -84,10 +87,19 @@ public class FileListView extends RecyclerView{
                 super(itemView);
                 view = itemView;
                 text  = (TextView) itemView.findViewById(R.id.file_name);
+                if(listener==null){
+                    listener = view1 ->
+                            Log.i("FileListView","On click works");
+                }
             }
 
             public void display(int position){
-                String name = files[position].getAbsolutePath();
+                File file = files[position];
+                view.setOnClickListener(view1 ->{
+                    if(listener!=null) listener.onSelected(file);
+                });
+
+                String name = file.getName();
                 text.setText(name);
                 Log.i("Recycler:display","file:"+name);
 
