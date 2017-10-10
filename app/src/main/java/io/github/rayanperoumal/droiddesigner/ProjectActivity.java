@@ -73,10 +73,21 @@ public class ProjectActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             view.setOnFileSelected(file ->{
-                    Log.i("FileListView:event", "On File"+file.getName());
+                if(file.isDirectory()) listFiles(file);
+                else Log.i("File:selected","No action for this file");
             });
 
-    }
+        }
+
+        /**
+         * List in RecyclerView the files present in an parent file
+         * @param parent File used for display his own sub files, need {@link File#isDirectory()} is true for it works })
+         */
+        public void listFiles(File parent){
+            if(parent.isDirectory()){
+                view.syncFiles(parent);
+            }
+        }
     }
 
 
