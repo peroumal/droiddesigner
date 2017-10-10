@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     EditText cloneText;
     File dir=null;
     TextView cloneTitle,alert;
+    RecyclerView list;
     public static final int CLONE_TERMINATED=2;
     public static final int CLONE_IN_PROGRESS=1;
     public static final int CLONE_AVAILABLE=0;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        list = (RecyclerView)findViewById(R.id.list);
         clonerView = (CardView) findViewById(R.id.clone);
         cloneText = (EditText) findViewById(R.id.cloneText);
         cloneTitle = (TextView) findViewById(R.id.cloneTitle);
