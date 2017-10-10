@@ -12,12 +12,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 
-import io.github.rayanperoumal.droiddesigner.file.FileListView;
+import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
 
 public class ProjectActivity extends AppCompatActivity {
     public static File parent;
@@ -63,11 +61,11 @@ public class ProjectActivity extends AppCompatActivity {
 
 
     public static class FileListFragment extends Fragment {
-        FileListView view;
+        FileRecyclerView view;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view =  new FileListView(getActivity(), parent);
+            view =  new FileRecyclerView(getActivity(),parent);
             return view;
         }
 

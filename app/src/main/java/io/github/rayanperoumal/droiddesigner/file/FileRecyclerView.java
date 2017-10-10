@@ -3,6 +3,7 @@ package io.github.rayanperoumal.droiddesigner.file;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,31 @@ import io.github.rayanperoumal.droiddesigner.R;
  * Created by rayanperoumal on 05/10/2017.
  */
 
-public class FileListView extends RecyclerView{
-    private static File [] files;
-    public static FileSelectionListener listener;
-    private final File parent;
+public class FileRecyclerView extends RecyclerView{
+    private File [] files;
+    public FileSelectionListener listener;
+    private File parent;
+    protected int item = R.layout.item_file;
 
-    public FileListView(Context context, File parent) {
+    public FileRecyclerView(Context context, File parent) {
         super(context);
         this.parent = parent;
-        files = catchFiles(parent);
+        this.files = catchFiles(parent);
         setLayoutManager(new LinearLayoutManager(context));
         setAdapter(new FileListViewAdapter(context));
+    }
+
+    public FileRecyclerView(Context context, AttributeSet attrs){
+        super(context,attrs);
+        setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    public void syncFiles(File file){
+        parent = file;
+        files = catchFiles(file);
+        Adapter adapter = getAdapter();
+        if(adapter!=null)adapter.notifyDataSetChanged();
+        else setAdapter(new FileListViewAdapter(getContext()));
     }
 
     public interface FileSelectionListener{
@@ -64,7 +79,7 @@ public class FileListView extends RecyclerView{
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_file,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(item,parent,false);
             viewHolder = new ViewHolder(view);
             return viewHolder;
         }
