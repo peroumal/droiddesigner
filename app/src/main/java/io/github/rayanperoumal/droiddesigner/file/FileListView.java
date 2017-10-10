@@ -86,11 +86,8 @@ public class FileListView extends RecyclerView{
             public ViewHolder(View itemView) {
                 super(itemView);
                 view = itemView;
+                view.setClickable(true);
                 text  = (TextView) itemView.findViewById(R.id.file_name);
-                if(listener==null){
-                    listener = view1 ->
-                            Log.i("FileListView","On click works");
-                }
             }
 
             public void display(int position){
@@ -98,7 +95,6 @@ public class FileListView extends RecyclerView{
                 view.setOnClickListener(view1 ->{
                     if(listener!=null) listener.onSelected(file);
                 });
-
                 String name = file.getName();
                 text.setText(name);
                 Log.i("Recycler:display","file:"+name);

@@ -62,12 +62,23 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
 
-    public static class FileListFragment extends Fragment{
+    public static class FileListFragment extends Fragment {
+        FileListView view;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return new FileListView(getActivity(),parent);
+            view =  new FileListView(getActivity(), parent);
+            return view;
         }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            view.setOnFileSelected(file ->{
+                    Log.i("FileListView:event", "On File"+file.getName());
+            });
+
+    }
     }
 
 
