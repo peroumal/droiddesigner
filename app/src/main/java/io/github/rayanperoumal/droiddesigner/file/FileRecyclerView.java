@@ -4,26 +4,21 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 
 import io.github.rayanperoumal.droiddesigner.R;
 
 /**
- * Created by rayanperoumal on 05/10/2017.
+ * @author rayan peroumal
  */
 
 public class FileRecyclerView extends RecyclerView{
     private File [] files;
     public FileSelectionListener listener;
     private File parent;
-    protected int item = R.layout.item_file;
+    protected int item = R.layout.view_file;
 
     public FileRecyclerView(Context context, File parent) {
         super(context);
@@ -46,41 +41,26 @@ public class FileRecyclerView extends RecyclerView{
         else setAdapter(new FileListViewAdapter(getContext()));
     }
 
-    public interface FileSelectionListener{
-        void onSelected(File file);
-    }
-
     public void setOnFileSelected(FileSelectionListener listener){
         this.listener = listener;
     }
 
-
     public File[] catchFiles(File file){
-        if(file.exists()){
-            File[] list= file.listFiles();
-            for(int i=0;i<list.length;i++){
-                try {
-                    Log.i("Project:found:",list[i].getCanonicalPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return list;
-        }
+        if(file.exists())
+            return file.listFiles();
         return new File[]{file};
     }
 
-    public class FileListViewAdapter extends RecyclerView.Adapter<FileListViewAdapter.ViewHolder>{
-        public Context context;
+    private class FileListViewAdapter extends RecyclerView.Adapter<FileListViewAdapter.ViewHolder>{
+        Context context;
         ViewHolder viewHolder;
-        public FileListViewAdapter(Context context){
+        FileListViewAdapter(Context context){
             this.context = context;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(item,parent,false);
-            viewHolder = new ViewHolder(view);
+            viewHolder = new ViewHolder(new FileView(context));
             return viewHolder;
         }
 
@@ -95,27 +75,18 @@ public class FileRecyclerView extends RecyclerView{
 
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            public TextView text;
-            public View view;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                view = itemView;
-                view.setClickable(true);
-                text  = (TextView) itemView.findViewById(R.id.file_name);
+        class ViewHolder extends RecyclerView.ViewHolder{
+            FileView view;
+            ViewHolder(FileView view) {
+                super(view);
+                this.view = view;
+                if(listener!=null)view.setOnFileSelected(listener);
             }
 
-            public void display(int position){
-                File file = files[position];
-                view.setOnClickListener(view1 ->{
-                    if(listener!=null) listener.onSelected(file);
-                });
-                String name = file.getName();
-                text.setText(name);
-                Log.i("Recycler:display","file:"+name);
-
+            void display(int position){
+                view.setFile(files[position]);
+                view.setTitle(null);
             }
         }
     }
-
 }

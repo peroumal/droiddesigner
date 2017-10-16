@@ -16,33 +16,29 @@ import android.view.ViewGroup;
 import java.io.File;
 
 import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
+import io.github.rayanperoumal.droiddesigner.file.FileView;
 
 public class ProjectActivity extends AppCompatActivity {
     public static File parent;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_files:
+                        return true;
+                    case R.id.navigation_code:
+                        return true;
+                    case R.id.navigation_graphics:
+                        return true;
+                    case R.id.navigation_manage:
+                        return true;
+                }
+                return false;
+            };
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_files:
-                    return true;
-                case R.id.navigation_code:
-                    return true;
-                case R.id.navigation_graphics:
-                    return true;
-                case R.id.navigation_manage:
-                    return true;
-            }
-            return false;
-        }
-
-    };
     public static void setFragment(FragmentManager fm, Fragment fragment) {
         fm.beginTransaction()
                 .replace(R.id.content, fragment).commit();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +54,6 @@ public class ProjectActivity extends AppCompatActivity {
         }
 
     }
-
 
     public static class FileListFragment extends Fragment {
         FileRecyclerView view;
@@ -89,6 +84,5 @@ public class ProjectActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }
