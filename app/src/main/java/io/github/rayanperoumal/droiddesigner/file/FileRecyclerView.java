@@ -28,6 +28,14 @@ public class FileRecyclerView extends RecyclerView{
         setAdapter(new FileListViewAdapter(context));
     }
 
+    public FileRecyclerView(Context context, File[] files) {
+        super(context);
+        this.parent = parent;
+        this.files = files;
+        setLayoutManager(new LinearLayoutManager(context));
+        setAdapter(new FileListViewAdapter(context));
+    }
+
     public FileRecyclerView(Context context, AttributeSet attrs){
         super(context,attrs);
         setLayoutManager(new LinearLayoutManager(context));

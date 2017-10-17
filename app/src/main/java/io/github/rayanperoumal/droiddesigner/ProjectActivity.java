@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
+import java.io.IOException;
 
 import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
 import io.github.rayanperoumal.droiddesigner.file.FileView;
@@ -50,7 +51,7 @@ public class ProjectActivity extends AppCompatActivity {
             String path = getIntent().getStringExtra("path");
             Log.i("Project:path:",path);
             parent = new File(path);
-            setFragment(getSupportFragmentManager(),new FileListFragment());
+            setFragment(getSupportFragmentManager(),new ResourceListFragment());
         }
 
     }
@@ -84,5 +85,48 @@ public class ProjectActivity extends AppCompatActivity {
             }
         }
     }
+    public static class ResourceListFragment extends Fragment {
+        FileRecyclerView view;
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+            File[] files = new File[]{
+                getColorFile(), getStringFile()
+            };
+            view =  new FileRecyclerView(getActivity(),files);
+            return view;
+        }
+
+        public File getColorFile(){
+            return getSubFile("app/src/res/values/colors.xml");
+        }
+
+        public File getStringFile(){
+            return getSubFile("app/src/res/values/strings.xml");
+        }
+
+        public File getSubFile(String path){
+            File file = new File(parent,path);
+            if(!file.exists()){
+                try {
+                    boolean b = file.createNewFile();
+                    if(!b)return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return file;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            view.setOnFileSelected(file ->{
+                Log.i("File:selected","Need to open file in editor");
+
+            });
+
+        }
+    }
 }
