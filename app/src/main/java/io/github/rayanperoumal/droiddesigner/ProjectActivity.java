@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
+import io.github.rayanperoumal.droiddesigner.file.FileSelection;
 import io.github.rayanperoumal.droiddesigner.file.FileView;
 
 public class ProjectActivity extends AppCompatActivity {
@@ -61,27 +62,32 @@ public class ProjectActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view =  new FileRecyclerView(getActivity(),parent);
+            view =  new FileRecyclerView(getActivity(),FileSelection.toArraySelection(parent));
             return view;
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            view.setOnFileSelected(file ->{
-                if(file.isDirectory()) listFiles(file);
+            view.setOnFileSelected(selection ->{
+                if(selection.getFiles()[0].isDirectory()) view.sync(selection);
                 else Log.i("File:selected","No action for this file");
             });
 
         }
 
+        public File[] catchFiles(File file){
+            if(file.exists())
+                return file.listFiles();
+            return new File[]{file};
+        }
+
         /**
-         * List in RecyclerView the files present in an parent file
-         * @param parent File used for display his own sub files, need {@link File#isDirectory()} is true for it works })
+         * List in RecyclerView the fileSelections
+         * @param selections is an Array of FileSelection used for, need {@link FileSelection#files} different of null })
          */
-        public void listFiles(File parent){
-            if(parent.isDirectory()){
-                view.syncFiles(parent);
+        public void listFiles(FileSelection[] selections){
+                view.sync(selections);
             }
         }
     }
@@ -91,19 +97,25 @@ public class ProjectActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            File[] files = new File[]{
-                getColorFile(), getStringFile()
+            FileSelection[] selections = new FileSelection[]{
+                getColorSelection(), getStringSelection()
             };
-            view =  new FileRecyclerView(getActivity(),files);
+            view =  new FileRecyclerView(getActivity(),selections);
             return view;
         }
 
-        public File getColorFile(){
-            return getSubFile("app/src/res/values/colors.xml");
+        public FileSelection getColorSelection(){
+            File f = getSubFile("app/src/res/values/colors.xml");
+            FileSelection fs = new FileSelection(new File[]{f});
+            fs.setName("Couleurs");
+            return fs;
         }
 
-        public File getStringFile(){
-            return getSubFile("app/src/res/values/strings.xml");
+        public FileSelection getStringSelection(){
+            File f =  getSubFile("app/src/res/values/strings.xml");
+            FileSelection fs = new FileSelection(new File[]{f});
+            fs.setName("Textes");
+            return fs;
         }
 
         public File getSubFile(String path){

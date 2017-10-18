@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 
 import java.io.File;
 import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
+import io.github.rayanperoumal.droiddesigner.file.FileSelection;
 
 /**
  * Created by rayanperoumal on 05/10/2017.
@@ -16,12 +17,15 @@ public class RepositoryRecyclerView extends FileRecyclerView {
 
     public RepositoryRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setOnFileSelected(file ->{
+        setOnFileSelected(selection ->{
             Intent intent = new Intent(context,ProjectActivity.class);
-            intent.putExtra("path",file.getAbsolutePath());
+            intent.putExtra("path",selection.getFiles()[0].getAbsolutePath());
             context.startActivity(intent);
         });
-        syncFiles(new File(context.getFilesDir(),"/repositories/"));
+
+        sync(new FileSelection[]{
+                new FileSelection(new File(context.getFilesDir(), "/repositories/").listFiles())
+        });
     }
 
 }

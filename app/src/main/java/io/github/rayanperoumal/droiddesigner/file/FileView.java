@@ -20,7 +20,7 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileView extends FrameLayout {
     TextView title;
-    private File file;
+    private FileSelection fileSelection;
     LinearLayout mainView;
     private FileSelectionListener listener;
 
@@ -45,7 +45,7 @@ public class FileView extends FrameLayout {
 
     public void setTitle(String text){
         if(text!=null)title.setText(text);
-        else if(file!=null) title.setText(file.getName());
+        else if(fileSelection !=null) title.setText(fileSelection.getName());
     }
 
     public void initViews(Context context){
@@ -57,11 +57,11 @@ public class FileView extends FrameLayout {
         title = mainView.findViewById(R.id.title);
     }
 
-    public void setFile(File file){
-        this.file = file;
+    public void setFileSelection(FileSelection selection){
+        this.fileSelection = selection;
         mainView.setOnClickListener(view1 ->{
-            Log.i("filerecyclerview","file is clicked");
-            if(listener!=null) listener.onSelected(file);
+            Log.i("filerecyclerview","fileSelection is clicked");
+            if(listener!=null) listener.onSelected(fileSelection);
         });
     }
 

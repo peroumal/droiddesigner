@@ -7,5 +7,5 @@ import java.io.File;
  */
 
 public interface FileSelectionListener {
-    void onSelected(File file);
+    void onSelected(FileSelection selection);
 }

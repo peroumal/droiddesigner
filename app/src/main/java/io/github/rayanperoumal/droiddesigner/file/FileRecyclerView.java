@@ -15,23 +15,13 @@ import io.github.rayanperoumal.droiddesigner.R;
  */
 
 public class FileRecyclerView extends RecyclerView{
-    private File [] files;
     public FileSelectionListener listener;
-    private File parent;
+    FileSelection[] fileSelections;
     protected int item = R.layout.view_file;
 
-    public FileRecyclerView(Context context, File parent) {
+    public FileRecyclerView(Context context, FileSelection[] fileSelections) {
         super(context);
-        this.parent = parent;
-        this.files = catchFiles(parent);
-        setLayoutManager(new LinearLayoutManager(context));
-        setAdapter(new FileListViewAdapter(context));
-    }
-
-    public FileRecyclerView(Context context, File[] files) {
-        super(context);
-        this.parent = parent;
-        this.files = files;
+        this.fileSelections = fileSelections;
         setLayoutManager(new LinearLayoutManager(context));
         setAdapter(new FileListViewAdapter(context));
     }
@@ -41,9 +31,8 @@ public class FileRecyclerView extends RecyclerView{
         setLayoutManager(new LinearLayoutManager(context));
     }
 
-    public void syncFiles(File file){
-        parent = file;
-        files = catchFiles(file);
+    public void sync(FileSelection[] selections){
+        this.fileSelections = selections;
         Adapter adapter = getAdapter();
         if(adapter!=null)adapter.notifyDataSetChanged();
         else setAdapter(new FileListViewAdapter(getContext()));
@@ -51,12 +40,6 @@ public class FileRecyclerView extends RecyclerView{
 
     public void setOnFileSelected(FileSelectionListener listener){
         this.listener = listener;
-    }
-
-    public File[] catchFiles(File file){
-        if(file.exists())
-            return file.listFiles();
-        return new File[]{file};
     }
 
     private class FileListViewAdapter extends RecyclerView.Adapter<FileListViewAdapter.ViewHolder>{
@@ -79,8 +62,7 @@ public class FileRecyclerView extends RecyclerView{
 
         @Override
         public int getItemCount() {
-            return files.length;
-
+            return fileSelections.length;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder{
@@ -92,8 +74,8 @@ public class FileRecyclerView extends RecyclerView{
             }
 
             void display(int position){
-                view.setFile(files[position]);
-                view.setTitle(null);
+                view.setFileSelection(fileSelections[position]);
+                view.setTitle(fileSelections[position].getName());
             }
         }
     }
