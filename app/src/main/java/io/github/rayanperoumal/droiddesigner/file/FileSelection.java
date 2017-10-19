@@ -26,10 +26,10 @@ public class FileSelection {
 
     public void addSelection(FileSelection selection){
 
-        // Add Files
-        if(this.files!=null && this.files.length>0){
-            System.arraycopy(selection.files,0,this.files,0,selection.files.length);
-        }else this.files=selection.files;
+        File[] files = new File[this.files.length+selection.files.length];
+        System.arraycopy(this.files,0,files,0,this.files.length);
+        System.arraycopy(selection.files,0,files,this.files.length,selection.files.length);
+        this.files =files;
 
     }
 

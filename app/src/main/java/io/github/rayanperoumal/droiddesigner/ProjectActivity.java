@@ -99,6 +99,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             FileSelection selections = new FileSelection();
             selections.addSelection(getColorSelection());
+            selections.addSelection(getStringSelection());
             view =  new FileRecyclerView(getActivity(),selections);
             return view;
         }
