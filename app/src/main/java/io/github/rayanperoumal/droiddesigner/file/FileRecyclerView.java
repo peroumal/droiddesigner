@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
-import java.io.File;
-
 import io.github.rayanperoumal.droiddesigner.R;
 
 /**
@@ -16,10 +14,10 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileRecyclerView extends RecyclerView{
     public FileSelectionListener listener;
-    FileSelection[] fileSelections;
+    FileSelection fileSelections;
     protected int item = R.layout.view_file;
 
-    public FileRecyclerView(Context context, FileSelection[] fileSelections) {
+    public FileRecyclerView(Context context, FileSelection fileSelections) {
         super(context);
         this.fileSelections = fileSelections;
         setLayoutManager(new LinearLayoutManager(context));
@@ -31,7 +29,7 @@ public class FileRecyclerView extends RecyclerView{
         setLayoutManager(new LinearLayoutManager(context));
     }
 
-    public void sync(FileSelection[] selections){
+    public void sync(FileSelection selections){
         this.fileSelections = selections;
         Adapter adapter = getAdapter();
         if(adapter!=null)adapter.notifyDataSetChanged();
@@ -62,7 +60,7 @@ public class FileRecyclerView extends RecyclerView{
 
         @Override
         public int getItemCount() {
-            return fileSelections.length;
+            return fileSelections.getCount();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder{
@@ -74,8 +72,9 @@ public class FileRecyclerView extends RecyclerView{
             }
 
             void display(int position){
-                view.setFileSelection(fileSelections[position]);
-                view.setTitle(fileSelections[position].getName());
+                FileSelection selection = fileSelections.getSelection(position);
+                view.setFileSelection(selection);
+                view.setTitle(selection.getName());
             }
         }
     }

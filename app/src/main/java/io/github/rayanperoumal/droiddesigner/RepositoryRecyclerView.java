@@ -23,9 +23,9 @@ public class RepositoryRecyclerView extends FileRecyclerView {
             context.startActivity(intent);
         });
 
-        sync(new FileSelection[]{
-                new FileSelection(new File(context.getFilesDir(), "/repositories/").listFiles())
-        });
+        sync(new FileSelection(
+                new File(context.getFilesDir(), "/repositories/").listFiles())
+        );
     }
 
 }

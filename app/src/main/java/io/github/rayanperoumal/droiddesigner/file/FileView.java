@@ -10,8 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
-
 import io.github.rayanperoumal.droiddesigner.R;
 
 /**

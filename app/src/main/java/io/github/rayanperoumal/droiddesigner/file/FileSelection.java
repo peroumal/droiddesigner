@@ -1,48 +1,64 @@
 package io.github.rayanperoumal.droiddesigner.file;
 
-import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 
 import java.io.File;
 
 /**
- * Created by r.peroumal on 17/10/2017.
+ * @author rayan peroumal
  */
 
 public class FileSelection {
     private File[] files;
+    public String name;
+
+    public FileSelection(){
+        this.files = new File[]{};
+    }
 
     public FileSelection(File[] files){
-        this.files = files;
+        this();
+        if(files!=null) this.files = files;
+    }
+
+    public FileSelection (File parent) {
+        this(parent.listFiles());
+    }
+
+    public void addSelection(FileSelection selection){
+
+        // Add Files
+        if(this.files!=null && this.files.length>0){
+            System.arraycopy(selection.files,0,this.files,0,selection.files.length);
+        }else this.files=selection.files;
+
+    }
+
+    FileSelection getSelection(int position){
+
+        return new FileSelection(getFiles(position));
     }
 
     public File[] getFiles() {
         return files;
     }
 
-    public static FileSelection[] toArraySelection(File parent) {
-        File[] files = parent.listFiles();
-        FileSelection[] selections =  new FileSelection[files.length];
-        for(int i=0;i<selections.length;i++){
-            FileSelection selection = new FileSelection(new File[]{files[i]});
-            selection.setName(files[i].getName());
-        }
-        return selections;
-    }
-
-    public void setFiles(File[] files) {
-        this.files = files;
+    private File[] getFiles(int position) {
+        return new File[]{files[position]};
     }
 
     public String getName() {
         if(name!=null)return name;
-        else if (files.length==1) return files[0].getName();
+        else if (files!=null && files.length==1) return files[0].getName();
         return null;
+    }
+
+    int getCount(){
+        return files.length;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String name;
+
 }

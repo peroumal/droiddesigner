@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fileSelections>
+<resources>
     <declare-styleable name="FileView">
         <attr name="title" format="string"/>
     </declare-styleable>
-</fileSelections>
+</resources>

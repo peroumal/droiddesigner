@@ -1,7 +1,6 @@
 package io.github.rayanperoumal.droiddesigner;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -62,7 +60,7 @@ public class ProjectActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view =  new FileRecyclerView(getActivity(),FileSelection.toArraySelection(parent));
+            view =  new FileRecyclerView(getActivity(),new FileSelection(parent));
             return view;
         }
 
@@ -70,7 +68,8 @@ public class ProjectActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             view.setOnFileSelected(selection ->{
-                if(selection.getFiles()[0].isDirectory()) view.sync(selection);
+                if(selection.getFiles()[0].isDirectory())
+                    view.sync(new FileSelection(selection.getFiles()[0]));
                 else Log.i("File:selected","No action for this file");
             });
 
@@ -86,20 +85,20 @@ public class ProjectActivity extends AppCompatActivity {
          * List in RecyclerView the fileSelections
          * @param selections is an Array of FileSelection used for, need {@link FileSelection#files} different of null })
          */
-        public void listFiles(FileSelection[] selections){
+        public void listFiles(FileSelection selections){
                 view.sync(selections);
             }
         }
-    }
+
+
     public static class ResourceListFragment extends Fragment {
         FileRecyclerView view;
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            FileSelection[] selections = new FileSelection[]{
-                getColorSelection(), getStringSelection()
-            };
+            FileSelection selections = new FileSelection();
+            selections.addSelection(getColorSelection());
             view =  new FileRecyclerView(getActivity(),selections);
             return view;
         }
@@ -141,4 +140,6 @@ public class ProjectActivity extends AppCompatActivity {
 
         }
     }
-}
+
+    }
+
