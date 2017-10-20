@@ -16,7 +16,6 @@ import java.io.IOException;
 
 import io.github.rayanperoumal.droiddesigner.file.FileRecyclerView;
 import io.github.rayanperoumal.droiddesigner.file.FileSelection;
-import io.github.rayanperoumal.droiddesigner.file.FileView;
 
 public class ProjectActivity extends AppCompatActivity {
     public static File parent;
@@ -108,6 +107,7 @@ public class ProjectActivity extends AppCompatActivity {
             File f = getSubFile("app/src/res/values/colors.xml");
             FileSelection fs = new FileSelection(new File[]{f});
             fs.setName("Couleurs");
+
             return fs;
         }
 

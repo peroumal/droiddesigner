@@ -1,6 +1,5 @@
 package io.github.rayanperoumal.droiddesigner.file;
 
-import java.io.File;
 
 /**
  * @author rayan peroumal
