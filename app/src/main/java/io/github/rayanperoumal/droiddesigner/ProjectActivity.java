@@ -45,10 +45,10 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        if (getIntent().hasExtra("path")) {
-            String path = getIntent().getStringExtra("path");
-            Log.i("Project:path:", path);
-            parent = new File(path);
+        if (getIntent().hasExtra("selection")) {
+            FileSelection selection = getIntent().getParcelableExtra("selection");
+            Log.i("fuckit","size:"+selection.getCount());
+            parent = new File(selection.getPath(0));
             setFragment(getSupportFragmentManager(), new ResourceListFragment());
         }
 
@@ -60,7 +60,11 @@ public class ProjectActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = new FileRecyclerView(getActivity(), new FileSelection(parent));
+            FileSelection selection = new FileSelection(parent.getName(),new String[]{parent.getAbsolutePath()});
+            for (File n:parent.listFiles()){
+                selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
+            }
+            view = new FileRecyclerView(getActivity(), selection);
             return view;
         }
 
@@ -69,8 +73,9 @@ public class ProjectActivity extends AppCompatActivity {
             super.onResume();
             view.setOnFileSelected(selection -> {
                 File f = new File(selection.getPaths()[0]);
+
                 if (f.isDirectory())
-                    view.sync(new FileSelection(f.list()));
+                    view.sync(new FileSelection());
                 else Log.i("File:selected", "No action for this file");
             });
 
@@ -100,17 +105,14 @@ public class ProjectActivity extends AppCompatActivity {
 
             public FileSelection getColorSelection() {
                 File f = getSubFile("app/src/res/values/colors.xml");
-                FileSelection fs = new FileSelection(new String[]{f.getAbsolutePath()});
-                fs.setName("Couleurs");
+                FileSelection fs = new FileSelection("Couleurs",new String[]{f.getAbsolutePath()});
                 fs.setOpener(new ColorOpener());
-
                 return fs;
             }
 
             public FileSelection getStringSelection() {
                 File f = getSubFile("app/src/res/values/strings.xml");
-                FileSelection fs = new FileSelection(new String[]{f.getAbsolutePath()});
-                fs.setName("Textes");
+                FileSelection fs = new FileSelection("Textes",new String[]{f.getAbsolutePath()});
                 return fs;
             }
 

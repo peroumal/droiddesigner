@@ -14,12 +14,12 @@ import io.github.rayanperoumal.droiddesigner.R;
 
 public class FileRecyclerView extends RecyclerView{
     public FileSelectionListener listener;
-    FileSelection fileSelections;
+    FileSelection fileSelection;
     protected int item = R.layout.view_file;
 
     public FileRecyclerView(Context context, FileSelection fileSelections) {
         super(context);
-        this.fileSelections = fileSelections;
+        this.fileSelection = fileSelections;
         setLayoutManager(new LinearLayoutManager(context));
         setAdapter(new FileListViewAdapter(context));
     }
@@ -29,8 +29,8 @@ public class FileRecyclerView extends RecyclerView{
         setLayoutManager(new LinearLayoutManager(context));
     }
 
-    public void sync(FileSelection selections){
-        this.fileSelections = selections;
+    public void sync(FileSelection selection){
+        this.fileSelection = selection;
         Adapter adapter = getAdapter();
         if(adapter!=null)adapter.notifyDataSetChanged();
         else setAdapter(new FileListViewAdapter(getContext()));
@@ -60,7 +60,7 @@ public class FileRecyclerView extends RecyclerView{
 
         @Override
         public int getItemCount() {
-            return fileSelections.getCount();
+            return fileSelection.getCount();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder{
@@ -72,7 +72,7 @@ public class FileRecyclerView extends RecyclerView{
             }
 
             void display(int position){
-                FileSelection selection = fileSelections.getSelection(position);
+                FileSelection selection = fileSelection.getSelection(position);
                 view.setFileSelection(selection);
                 view.setTitle(selection.getName());
             }

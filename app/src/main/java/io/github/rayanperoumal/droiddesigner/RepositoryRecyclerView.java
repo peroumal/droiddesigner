@@ -19,18 +19,26 @@ public class RepositoryRecyclerView extends FileRecyclerView {
     public RepositoryRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setOnFileSelected(selection ->{
+            File file = new File(selection.getPath(0));
+            for (File n:file.listFiles()){
+                Log.i("fuckit","name:"+n.getName());
+                selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
+            }
             Intent intent = new Intent(context,ProjectActivity.class);
-            intent.putExtra("path",selection.getPaths()[0]);
+            intent.putExtra("selection",selection);
             context.startActivity(intent);
         });
 
         File file = new File(context.getFilesDir(), "/repositories/");
+        FileSelection selection = new FileSelection(file.getName(),new String[]{file.getAbsolutePath()});
 
 
-        String[] list = file.list();
-        if(list!=null && list.length>0) sync(new FileSelection(list));
+        for (File n:file.listFiles()){
+            selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
 
 
+        }
+        sync(selection);
     }
 
 }

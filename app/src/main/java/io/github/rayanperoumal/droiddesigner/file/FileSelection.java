@@ -2,27 +2,31 @@ package io.github.rayanperoumal.droiddesigner.file;
 
 
 import android.os.Bundle;
-
-import java.io.File;
+import java.util.ArrayList;
 
 /**
  * @author rayan peroumal
+ * @version 2
  */
 
-public class FileSelection {
+public class FileSelection implements java.io.Serializable{
     private String[] paths;
     public String name;
+    private ArrayList<FileSelection> childs;
     private FileSelectionOpener opener;
     private FileSelectionListener listener;
 
     public FileSelection(){
+        this.childs = new ArrayList<>();
         this.paths = new String[]{};
-        opener = null;
+        this.opener = null;
+        this.name = null;
     }
 
-    public FileSelection(String[] paths){
+    public FileSelection(String name, String[] paths){
         this();
         if(paths!=null) this.paths = paths;
+        this.name = name;
     }
 
     public FileSelectionOpener open(FileSelection selection, int layout){
@@ -43,30 +47,28 @@ public class FileSelection {
         opener.setArguments(b);
     }
 
-    public FileSelection (File parent) {
-        this(parent.list());
-    }
-
     public void addSelection(FileSelection selection){
-
-        String[] paths = new String[this.paths.length+selection.paths.length];
-        System.arraycopy(this.paths,0,paths,0,this.paths.length);
-        System.arraycopy(selection.paths,0,paths,this.paths.length,selection.paths.length);
-        this.paths =paths;
-
+        childs.add(selection);
     }
 
     public FileSelection getSelection(int position){
+        return childs.get(position);
+    }
 
-        return new FileSelection(getPaths(position));
+    public FileSelection getChild(int position) {
+        return childs.get(position);
+    }
+
+    public ArrayList<FileSelection> getChilds() {
+        return childs;
+    }
+
+    public String getPath(int position) {
+        return paths[position];
     }
 
     public String[] getPaths() {
         return paths;
-    }
-
-    private String[] getPaths(int position) {
-        return new String[]{paths[position]};
     }
 
     public String getName() {
@@ -75,13 +77,12 @@ public class FileSelection {
         return null;
     }
 
-    int getCount(){
-        return paths.length;
+    public int getCount(){
+        return childs.size();
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
 
 }
