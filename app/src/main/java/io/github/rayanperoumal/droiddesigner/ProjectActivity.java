@@ -21,18 +21,18 @@ public class ProjectActivity extends AppCompatActivity {
     public static File parent;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_files:
-                        return true;
-                    case R.id.navigation_code:
-                        return true;
-                    case R.id.navigation_graphics:
-                        return true;
-                    case R.id.navigation_manage:
-                        return true;
-                }
-                return false;
-            };
+        switch (item.getItemId()) {
+            case R.id.navigation_files:
+                return true;
+            case R.id.navigation_code:
+                return true;
+            case R.id.navigation_graphics:
+                return true;
+            case R.id.navigation_manage:
+                return true;
+        }
+        return false;
+    };
 
     public static void setFragment(FragmentManager fm, Fragment fragment) {
         fm.beginTransaction()
@@ -45,102 +45,96 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        if(getIntent().hasExtra("path")){
+        if (getIntent().hasExtra("path")) {
             String path = getIntent().getStringExtra("path");
-            Log.i("Project:path:",path);
+            Log.i("Project:path:", path);
             parent = new File(path);
-            setFragment(getSupportFragmentManager(),new ResourceListFragment());
+            setFragment(getSupportFragmentManager(), new ResourceListFragment());
         }
 
     }
 
     public static class FileListFragment extends Fragment {
         FileRecyclerView view;
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view =  new FileRecyclerView(getActivity(),new FileSelection(parent));
+            view = new FileRecyclerView(getActivity(), new FileSelection(parent));
             return view;
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            view.setOnFileSelected(selection ->{
-                if(selection.getFiles()[0].isDirectory())
-                    view.sync(new FileSelection(selection.getFiles()[0]));
-                else Log.i("File:selected","No action for this file");
+            view.setOnFileSelected(selection -> {
+                File f = new File(selection.getPaths()[0]);
+                if (f.isDirectory())
+                    view.sync(new FileSelection(f.list()));
+                else Log.i("File:selected", "No action for this file");
             });
 
         }
 
-        public File[] catchFiles(File file){
-            if(file.exists())
+        public File[] catchFiles(File file) {
+            if (file.exists())
                 return file.listFiles();
             return new File[]{file};
         }
+    }
 
-        /**
-         * List in RecyclerView the fileSelections
-         * @param selections is an Array of FileSelection used for, need {@link FileSelection#files} different of null })
-         */
-        public void listFiles(FileSelection selections){
-                view.sync(selections);
+
+        public static class ResourceListFragment extends Fragment {
+            FileRecyclerView view;
+
+            @Nullable
+            @Override
+            public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+                FileSelection selections = new FileSelection();
+                selections.addSelection(getColorSelection());
+                selections.addSelection(getStringSelection());
+                view = new FileRecyclerView(getActivity(), selections);
+                return view;
             }
-        }
 
+            public FileSelection getColorSelection() {
+                File f = getSubFile("app/src/res/values/colors.xml");
+                FileSelection fs = new FileSelection(new String[]{f.getAbsolutePath()});
+                fs.setName("Couleurs");
+                fs.setOpener(new ColorOpener());
 
-    public static class ResourceListFragment extends Fragment {
-        FileRecyclerView view;
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                return fs;
+            }
 
-            FileSelection selections = new FileSelection();
-            selections.addSelection(getColorSelection());
-            selections.addSelection(getStringSelection());
-            view =  new FileRecyclerView(getActivity(),selections);
-            return view;
-        }
+            public FileSelection getStringSelection() {
+                File f = getSubFile("app/src/res/values/strings.xml");
+                FileSelection fs = new FileSelection(new String[]{f.getAbsolutePath()});
+                fs.setName("Textes");
+                return fs;
+            }
 
-        public FileSelection getColorSelection(){
-            File f = getSubFile("app/src/res/values/colors.xml");
-            FileSelection fs = new FileSelection(new File[]{f});
-            fs.setName("Couleurs");
-
-            return fs;
-        }
-
-        public FileSelection getStringSelection(){
-            File f =  getSubFile("app/src/res/values/strings.xml");
-            FileSelection fs = new FileSelection(new File[]{f});
-            fs.setName("Textes");
-            return fs;
-        }
-
-        public File getSubFile(String path){
-            File file = new File(parent,path);
-            if(!file.exists()){
-                try {
-                    boolean b = file.createNewFile();
-                    if(!b)return null;
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public File getSubFile(String path) {
+                File file = new File(parent, path);
+                if (!file.exists()) {
+                    try {
+                        boolean b = file.createNewFile();
+                        if (!b) return null;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                return file;
             }
-            return file;
+
+            @Override
+            public void onResume() {
+                super.onResume();
+                view.setOnFileSelected(file -> {
+                    Log.i("File:selected", "Need to open file in editor");
+
+                });
+
+            }
         }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            view.setOnFileSelected(file ->{
-                Log.i("File:selected","Need to open file in editor");
-
-            });
-
-        }
-    }
-
-    }
-
+}
