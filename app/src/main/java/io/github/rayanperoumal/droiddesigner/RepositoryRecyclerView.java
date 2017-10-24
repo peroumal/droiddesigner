@@ -21,11 +21,11 @@ public class RepositoryRecyclerView extends FileRecyclerView {
         setOnFileSelected(selection ->{
             File file = new File(selection.getPath(0));
             for (File n:file.listFiles()){
-                Log.i("fuckit","name:"+n.getName());
+                Log.i("fuckit","path:"+n.getPath());
                 selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
             }
             Intent intent = new Intent(context,ProjectActivity.class);
-            intent.putExtra("selection",selection);
+            intent.putExtra("path",selection.getPath(0));
             context.startActivity(intent);
         });
 

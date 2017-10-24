@@ -45,10 +45,10 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        if (getIntent().hasExtra("selection")) {
-            FileSelection selection = getIntent().getParcelableExtra("selection");
-            Log.i("fuckit","size:"+selection.getCount());
-            parent = new File(selection.getPath(0));
+        if (getIntent().hasExtra("path")) {
+            String path = getIntent().getStringExtra("path");
+            Log.i("fuckit","path:"+path);
+            parent = new File(path);
             setFragment(getSupportFragmentManager(), new ResourceListFragment());
         }
 
@@ -89,7 +89,7 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
 
-        public static class ResourceListFragment extends Fragment {
+    public static class ResourceListFragment extends Fragment {
             FileRecyclerView view;
 
             @Nullable
