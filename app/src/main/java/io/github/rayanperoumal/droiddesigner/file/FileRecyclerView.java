@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 
 import io.github.rayanperoumal.droiddesigner.R;
@@ -69,6 +70,7 @@ public class FileRecyclerView extends RecyclerView{
                 super(view);
                 this.view = view;
                 if(listener!=null)view.setOnFileSelected(listener);
+
             }
 
             void display(int position){

@@ -106,7 +106,8 @@ public class ProjectActivity extends AppCompatActivity {
             public FileSelection getColorSelection() {
                 File f = getSubFile("app/src/res/values/colors.xml");
                 FileSelection fs = new FileSelection("Couleurs",new String[]{f.getAbsolutePath()});
-                fs.setOpener(new ColorOpener());
+                fs.setOpener(getFragmentManager().beginTransaction()
+                        .replace(R.id.content, new ColorOpener()));
                 return fs;
             }
 
@@ -134,7 +135,7 @@ public class ProjectActivity extends AppCompatActivity {
                 super.onResume();
                 view.setOnFileSelected(file -> {
                     Log.i("File:selected", "Need to open file in editor");
-
+                    file.open();
                 });
 
             }

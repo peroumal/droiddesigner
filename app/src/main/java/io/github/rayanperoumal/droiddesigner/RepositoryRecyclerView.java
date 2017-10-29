@@ -32,13 +32,13 @@ public class RepositoryRecyclerView extends FileRecyclerView {
         File file = new File(context.getFilesDir(), "/repositories/");
         FileSelection selection = new FileSelection(file.getName(),new String[]{file.getAbsolutePath()});
 
+        if(file.listFiles()!=null){
+            for (File n:file.listFiles())
+                selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
 
-        for (File n:file.listFiles()){
-            selection.addSelection(new FileSelection(n.getName(),new String[]{n.getAbsolutePath()}));
-
-
+            sync(selection);
         }
-        sync(selection);
+
     }
 
 }

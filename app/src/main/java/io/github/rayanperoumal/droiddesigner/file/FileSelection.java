@@ -2,7 +2,16 @@ package io.github.rayanperoumal.droiddesigner.file;
 
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+
 import java.util.ArrayList;
+
+import io.github.rayanperoumal.droiddesigner.ColorOpener;
+import io.github.rayanperoumal.droiddesigner.R;
 
 /**
  * @author rayan peroumal
@@ -12,9 +21,13 @@ import java.util.ArrayList;
 public class FileSelection implements java.io.Serializable{
     private String[] paths;
     public String name;
+    private FragmentTransaction opener;
     private ArrayList<FileSelection> childs;
-    private FileSelectionOpener opener;
     private FileSelectionListener listener;
+    private FragmentTransaction transaction;
+    private @IdRes int layout;
+    private FileSelectionOpener fragment;
+    private FragmentManager manager;
 
     public FileSelection(){
         this.childs = new ArrayList<>();
@@ -29,22 +42,20 @@ public class FileSelection implements java.io.Serializable{
         this.name = name;
     }
 
-    public FileSelectionOpener open(FileSelection selection, int layout){
-        if(listener!=null)listener.onSelected(selection);
-        if(opener !=null) return opener;
-        return null;
+    public int open(){
+        if(listener!=null)listener.onSelected(this);
+        if(opener !=null){
+            return opener.commit();
+        }
+        return -1;
     }
 
     public void setOnFilectionSelectionListener(FileSelectionListener listener){
         this.listener = listener;
     }
 
-    public void setOpener(FileSelectionOpener editor){
-        this.opener = editor;
-        Bundle b = new Bundle();
-        b.putStringArray("paths",paths);
-        b.putString("name",name);
-        opener.setArguments(b);
+    public void setOpener(FragmentTransaction opener){
+        this.opener = opener;
     }
 
     public void addSelection(FileSelection selection){
